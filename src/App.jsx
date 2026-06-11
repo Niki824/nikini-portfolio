@@ -1,20 +1,28 @@
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import {
-  FaGithub, FaLinkedin, FaEnvelope, FaDownload, FaExternalLinkAlt, FaBars, FaTimes,
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaDownload,
+  FaExternalLinkAlt,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import {
-  RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+  ResponsiveContainer,
 } from "recharts";
 
-/* ── DATA ─────────────────────────────────────────────────────────────── */
-
 const ROLES = [
-  "AI Developer",
+  "AI Engineer",
   "Machine Learning Engineer",
+  "Graph RAG Developer",
+  "NLP Engineer",
   "Cybersecurity Builder",
-  "NLP Researcher",
-  "Full-Stack Developer",
 ];
 
 const PROJECTS = [
@@ -23,9 +31,18 @@ const PROJECTS = [
     desc: "Machine learning based phishing website detection system with real-time cybersecurity risk scoring and threat intelligence.",
     tech: ["Python", "Streamlit", "Scikit-learn", "Cybersecurity"],
     image: "/projects/cyberscope.jpeg",
-    github: "https://github.com/Niki824",
+    github: "https://github.com/Niki824/AI-CyberScope",
     demo: null,
     accent: "#a855f7",
+  },
+  {
+    title: "IKIP AI",
+    desc: "Interactive Knowledge Intelligence Platform that transforms PDF documents into knowledge graphs, Graph RAG Q&A, quizzes, flashcards and study notes.",
+    tech: ["Python", "Streamlit", "NLP", "Knowledge Graphs", "Graph RAG"],
+    image: "/projects/ikip-ai.png",
+    github: "https://github.com/Niki824/IKIP-AI-Knowledge-Assistant",
+    demo: null,
+    accent: "#8b5cf6",
   },
   {
     title: "Smart Garbage Monitor",
@@ -60,8 +77,8 @@ const SKILLS_RADAR = [
   { subject: "Machine Learning", score: 88 },
   { subject: "Python", score: 92 },
   { subject: "Cybersecurity", score: 80 },
-  { subject: "NLP", score: 75 },
-  { subject: "Web Dev", score: 78 },
+  { subject: "NLP", score: 82 },
+  { subject: "Graph RAG", score: 78 },
   { subject: "IoT", score: 72 },
   { subject: "Data Science", score: 83 },
 ];
@@ -70,6 +87,8 @@ const SKILLS_TAGS = [
   { name: "Python", level: "Expert" },
   { name: "Machine Learning", level: "Advanced" },
   { name: "NLP", level: "Advanced" },
+  { name: "Graph RAG", level: "Advanced" },
+  { name: "Knowledge Graphs", level: "Advanced" },
   { name: "Cybersecurity", level: "Advanced" },
   { name: "React", level: "Intermediate" },
   { name: "JavaScript", level: "Intermediate" },
@@ -83,6 +102,12 @@ const SKILLS_TAGS = [
   { name: "GitHub", level: "Advanced" },
 ];
 
+const STATS = [
+  { number: "5+", label: "Projects Completed" },
+  { number: "15+", label: "Technologies Used" },
+  { number: "4", label: "Focus Areas" },
+];
+
 const TIMELINE = [
   {
     year: "2024 – 2027",
@@ -90,35 +115,49 @@ const TIMELINE = [
     org: "Coventry University · NIBM (KIC)",
     desc: "Specialising in AI, Machine Learning, NLP and Cybersecurity. Building real-world intelligent systems.",
     icon: "🎓",
-    color: "#a855f7",
   },
   {
-    year: "2024",
+    year: "2026",
+    title: "IKIP AI Platform",
+    org: "Personal AI Project",
+    desc: "Built a Graph RAG knowledge assistant that converts PDFs into knowledge graphs, quizzes, flashcards and intelligent Q&A.",
+    icon: "🧠",
+  },
+  {
+    year: "2026",
     title: "AI-CyberScope Project",
-    org: "Academic Project",
-    desc: "Built a phishing detection system using ML models achieving high accuracy on real website datasets.",
+    org: "Personal AI Project",
+    desc: "Built a phishing detection system using ML models, cybersecurity indicators and real-time risk scoring.",
     icon: "🛡️",
-    color: "#3b82f6",
   },
   {
-    year: "2024",
+    year: "2026",
     title: "IoT Smart Monitoring System",
     org: "Academic Project",
-    desc: "Designed and deployed a full IoT pipeline using Arduino, ESP8266 and Firebase for real-time data.",
+    desc: "Designed and developed an IoT pipeline using Arduino, ESP8266 and Firebase for real-time garbage monitoring.",
     icon: "♻️",
-    color: "#10b981",
   },
 ];
 
 const LEVEL_COLOR = {
-  Expert: { bg: "bg-violet-500/20", text: "text-violet-300", border: "border-violet-500/30" },
-  Advanced: { bg: "bg-blue-500/20", text: "text-blue-300", border: "border-blue-500/30" },
-  Intermediate: { bg: "bg-slate-500/20", text: "text-slate-300", border: "border-slate-500/30" },
+  Expert: {
+    bg: "bg-violet-500/20",
+    text: "text-violet-300",
+    border: "border-violet-500/30",
+  },
+  Advanced: {
+    bg: "bg-blue-500/20",
+    text: "text-blue-300",
+    border: "border-blue-500/30",
+  },
+  Intermediate: {
+    bg: "bg-slate-500/20",
+    text: "text-slate-300",
+    border: "border-slate-500/30",
+  },
 };
 
 const NAV_LINKS = ["about", "skills", "projects", "timeline", "contact"];
-
-/* ── PARTICLE CANVAS ──────────────────────────────────────────────────── */
 
 function ParticleCanvas() {
   const canvasRef = useRef(null);
@@ -133,12 +172,17 @@ function ParticleCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
+
+    const onMouseMove = (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+
     resize();
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener("mousemove", onMouseMove);
 
-    const COUNT = 80;
-    const particles = Array.from({ length: COUNT }, () => ({
+    const particles = Array.from({ length: 80 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 1.5 + 0.3,
@@ -153,6 +197,7 @@ function ParticleCanvas() {
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
+
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
@@ -170,12 +215,12 @@ function ParticleCanvas() {
         ctx.fill();
       });
 
-      // Draw connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
+
           if (d < 100) {
             ctx.beginPath();
             ctx.strokeStyle = `rgba(168,85,247,${0.08 * (1 - d / 100)})`;
@@ -189,23 +234,18 @@ function ParticleCanvas() {
 
       raf = requestAnimationFrame(draw);
     };
+
     draw();
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 -z-10 pointer-events-none"
-    />
-  );
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 pointer-events-none" />;
 }
-
-/* ── TYPEWRITER ───────────────────────────────────────────────────────── */
 
 function Typewriter({ words }) {
   const [index, setIndex] = useState(0);
@@ -219,11 +259,13 @@ function Typewriter({ words }) {
     const timeout = setTimeout(() => {
       if (!deleting) {
         setText(word.slice(0, text.length + 1));
+
         if (text.length + 1 === word.length) {
           setTimeout(() => setDeleting(true), 1800);
         }
       } else {
         setText(word.slice(0, text.length - 1));
+
         if (text.length - 1 === 0) {
           setDeleting(false);
           setIndex((i) => (i + 1) % words.length);
@@ -242,8 +284,6 @@ function Typewriter({ words }) {
   );
 }
 
-/* ── SCROLL ACTIVE NAV ────────────────────────────────────────────────── */
-
 function useActiveSection(sections) {
   const [active, setActive] = useState("");
 
@@ -251,20 +291,23 @@ function useActiveSection(sections) {
     const observers = sections.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
+
       const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
+        ([entry]) => {
+          if (entry.isIntersecting) setActive(id);
+        },
         { threshold: 0.3 }
       );
+
       obs.observe(el);
       return obs;
     });
+
     return () => observers.forEach((o) => o?.disconnect());
   }, [sections]);
 
   return active;
 }
-
-/* ── MAIN APP ─────────────────────────────────────────────────────────── */
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -274,6 +317,7 @@ export default function App() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -284,19 +328,21 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#04030f] text-white overflow-x-hidden">
-
-      {/* Particle bg */}
       <ParticleCanvas />
 
-      {/* Ambient glows */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] bg-violet-700/10 rounded-full blur-[140px]" />
         <div className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-fuchsia-700/8 rounded-full blur-[160px]" />
         <div className="absolute top-[50%] left-[-10%] w-[400px] h-[400px] bg-blue-700/8 rounded-full blur-[130px]" />
       </div>
 
-      {/* ── NAVBAR ── */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-black/60 backdrop-blur-2xl border-b border-white/8 py-3" : "py-5"}`}>
+      <nav
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-black/60 backdrop-blur-2xl border-b border-white/8 py-3"
+            : "py-5"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -307,7 +353,6 @@ export default function App() {
             <span className="text-violet-400">.</span>
           </motion.div>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <button
@@ -322,6 +367,7 @@ export default function App() {
                 {link}
               </button>
             ))}
+
             <a
               href="/cv.pdf"
               download
@@ -331,7 +377,6 @@ export default function App() {
             </a>
           </div>
 
-          {/* Mobile menu toggle */}
           <button
             className="md:hidden text-gray-300 hover:text-white"
             onClick={() => setMenuOpen((v) => !v)}
@@ -341,7 +386,6 @@ export default function App() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -360,6 +404,7 @@ export default function App() {
                     {link}
                   </button>
                 ))}
+
                 <a
                   href="/cv.pdf"
                   download
@@ -373,7 +418,6 @@ export default function App() {
         </AnimatePresence>
       </nav>
 
-      {/* ── HERO ── */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 text-center relative">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -404,7 +448,7 @@ export default function App() {
 
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-12 leading-8">
             CS undergraduate specialising in Artificial Intelligence, Machine
-            Learning, NLP and Cybersecurity — building systems that actually
+            Learning, NLP, Graph RAG and Cybersecurity — building systems that
             solve real-world problems.
           </p>
 
@@ -417,6 +461,7 @@ export default function App() {
             >
               View Projects
             </motion.button>
+
             <motion.a
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
@@ -428,24 +473,8 @@ export default function App() {
             </motion.a>
           </div>
         </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600"
-        >
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-px h-8 bg-gradient-to-b from-gray-600 to-transparent"
-          />
-        </motion.div>
       </section>
 
-      {/* ── ABOUT ── */}
       <section id="about" className="py-28 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -454,17 +483,23 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">About me</p>
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              About me
+            </p>
+
             <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-              Building the future<br />
+              Building the future
+              <br />
               <span className="text-gray-500">with AI.</span>
             </h2>
+
             <p className="text-gray-400 leading-8 mb-6">
               I'm a dedicated Computer Science undergraduate specialising in
               Artificial Intelligence. I enjoy building practical AI
-              applications, cybersecurity tools and intelligent systems that
-              solve real-world problems.
+              applications, cybersecurity tools, Graph RAG assistants and
+              intelligent systems that solve real-world problems.
             </p>
+
             <p className="text-gray-500 leading-8">
               Based in Sri Lanka · Studying at NIBM (KIC) / Coventry University ·
               Passionate about turning research into working products.
@@ -479,10 +514,26 @@ export default function App() {
             className="grid grid-cols-2 gap-4"
           >
             {[
-              { icon: "🤖", label: "Machine Learning", sub: "Applied ML & deep learning" },
-              { icon: "🔐", label: "Cybersecurity", sub: "Threat detection & analysis" },
-              { icon: "💬", label: "NLP & AI", sub: "Language & intelligent systems" },
-              { icon: "🔌", label: "IoT Systems", sub: "Embedded & cloud connected" },
+              {
+                icon: "🤖",
+                label: "Machine Learning",
+                sub: "Applied ML & prediction systems",
+              },
+              {
+                icon: "🧠",
+                label: "Graph RAG",
+                sub: "Knowledge graphs & Q&A",
+              },
+              {
+                icon: "🔐",
+                label: "Cybersecurity",
+                sub: "Threat detection & analysis",
+              },
+              {
+                icon: "🔌",
+                label: "IoT Systems",
+                sub: "Embedded & cloud connected",
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.label}
@@ -501,7 +552,26 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── SKILLS ── */}
+      <section className="py-16 px-6 bg-black/20">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {STATS.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="text-center bg-white/3 border border-white/8 rounded-2xl p-7"
+            >
+              <h3 className="text-4xl font-black text-violet-300 mb-2">
+                {stat.number}
+              </h3>
+              <p className="text-gray-500 text-sm">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       <section id="skills" className="py-28 px-6 bg-black/20">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -510,12 +580,13 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">Skills</p>
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Skills
+            </p>
             <h2 className="text-4xl md:text-5xl font-black">My tech stack</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Radar chart */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -542,7 +613,6 @@ export default function App() {
               </ResponsiveContainer>
             </motion.div>
 
-            {/* Skill tags */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -552,6 +622,7 @@ export default function App() {
             >
               {SKILLS_TAGS.map((skill, i) => {
                 const c = LEVEL_COLOR[skill.level];
+
                 return (
                   <motion.span
                     key={skill.name}
@@ -563,7 +634,9 @@ export default function App() {
                     className={`px-4 py-2 rounded-full border text-sm font-medium cursor-default ${c.bg} ${c.text} ${c.border}`}
                   >
                     {skill.name}
-                    <span className="ml-2 text-xs opacity-60">{skill.level}</span>
+                    <span className="ml-2 text-xs opacity-60">
+                      {skill.level}
+                    </span>
                   </motion.span>
                 );
               })}
@@ -572,7 +645,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── PROJECTS ── */}
       <section id="projects" className="py-28 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -581,10 +653,15 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">Work</p>
-            <h2 className="text-4xl md:text-5xl font-black mb-4">Featured projects</h2>
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Work
+            </p>
+            <h2 className="text-4xl md:text-5xl font-black mb-4">
+              Featured projects
+            </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              AI, cybersecurity and intelligent software — built from scratch.
+              AI, Graph RAG, cybersecurity and intelligent software — built from
+              scratch.
             </p>
           </motion.div>
 
@@ -599,13 +676,13 @@ export default function App() {
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="group relative bg-white/3 border border-white/8 rounded-3xl p-8 overflow-hidden hover:border-white/20 transition-all duration-300"
               >
-                {/* Hover glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(circle at 50% 0%, ${project.accent}15, transparent 70%)` }}
+                  style={{
+                    background: `radial-gradient(circle at 50% 0%, ${project.accent}15, transparent 70%)`,
+                  }}
                 />
 
-                {/* Image */}
                 <div className="h-44 rounded-2xl mb-6 overflow-hidden relative">
                   <img
                     src={project.image}
@@ -618,7 +695,10 @@ export default function App() {
                 <h3 className="text-xl font-bold mb-3 text-white group-hover:text-violet-200 transition-colors">
                   {project.title}
                 </h3>
-                <p className="text-gray-400 text-sm mb-5 leading-7">{project.desc}</p>
+
+                <p className="text-gray-400 text-sm mb-5 leading-7">
+                  {project.desc}
+                </p>
 
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((t) => (
@@ -631,7 +711,6 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* Links */}
                 <div className="flex gap-3">
                   <a
                     href={project.github}
@@ -641,6 +720,7 @@ export default function App() {
                   >
                     <FaGithub size={13} /> GitHub
                   </a>
+
                   {project.demo && (
                     <a
                       href={project.demo}
@@ -658,7 +738,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── TIMELINE ── */}
       <section id="timeline" className="py-28 px-6 bg-black/20">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -667,12 +746,15 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">Journey</p>
-            <h2 className="text-4xl md:text-5xl font-black">Education & milestones</h2>
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Journey
+            </p>
+            <h2 className="text-4xl md:text-5xl font-black">
+              Education & milestones
+            </h2>
           </motion.div>
 
           <div className="relative">
-            {/* Vertical line */}
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/60 via-fuchsia-500/30 to-transparent -translate-x-1/2" />
 
             {TIMELINE.map((item, i) => (
@@ -682,21 +764,30 @@ export default function App() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: i * 0.15 }}
-                className={`relative flex items-start gap-6 mb-12 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-row`}
+                className={`relative flex items-start gap-6 mb-12 ${
+                  i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                } flex-row`}
               >
-                {/* Dot */}
                 <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-violet-500 bg-[#04030f] z-10" />
 
-                {/* Content */}
-                <div className={`ml-16 md:ml-0 md:w-[calc(50%-2rem)] ${i % 2 === 0 ? "md:pr-8" : "md:pl-8"}`}>
+                <div
+                  className={`ml-16 md:ml-0 md:w-[calc(50%-2rem)] ${
+                    i % 2 === 0 ? "md:pr-8" : "md:pl-8"
+                  }`}
+                >
                   <div className="bg-white/3 border border-white/8 rounded-2xl p-6 hover:border-violet-500/30 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-2xl">{item.icon}</span>
-                      <span className="text-xs text-violet-400 font-semibold tracking-wider uppercase">{item.year}</span>
+                      <span className="text-xs text-violet-400 font-semibold tracking-wider uppercase">
+                        {item.year}
+                      </span>
                     </div>
+
                     <h3 className="text-white font-bold mb-1">{item.title}</h3>
                     <p className="text-violet-300/70 text-sm mb-3">{item.org}</p>
-                    <p className="text-gray-500 text-sm leading-6">{item.desc}</p>
+                    <p className="text-gray-500 text-sm leading-6">
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -705,7 +796,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
       <section id="contact" className="py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
@@ -713,10 +803,16 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">Contact</p>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Let's build something<br />
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Contact
+            </p>
+
+            <h2 className="text-4xl md:text-5xl font-black mb-6">
+              Let's build something
+              <br />
               <span className="text-gray-500">extraordinary.</span>
             </h2>
+
             <p className="text-gray-400 mb-12 leading-8">
               Open to internships, AI project collaborations and research
               opportunities. Feel free to reach out.
@@ -731,14 +827,26 @@ export default function App() {
 
             <div className="flex justify-center gap-5">
               {[
-                { icon: <FaGithub size={20} />, href: "https://github.com/Niki824", label: "GitHub" },
-                { icon: <FaLinkedin size={20} />, href: "https://www.linkedin.com/in/nikini-edirisinghe-307491359", label: "LinkedIn" },
-                { icon: <FaEnvelope size={20} />, href: "mailto:nikinivihangaedirisinghe@gmail.com", label: "Email" },
+                {
+                  icon: <FaGithub size={20} />,
+                  href: "https://github.com/Niki824",
+                  label: "GitHub",
+                },
+                {
+                  icon: <FaLinkedin size={20} />,
+                  href: "https://www.linkedin.com/in/nikini-edirisinghe-307491359",
+                  label: "LinkedIn",
+                },
+                {
+                  icon: <FaEnvelope size={20} />,
+                  href: "mailto:nikinivihangaedirisinghe@gmail.com",
+                  label: "Email",
+                },
               ].map((s) => (
                 <motion.a
                   key={s.label}
                   href={s.href}
-                  target="_blank"
+                  target={s.href.startsWith("mailto:") ? "_self" : "_blank"}
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.15, y: -3 }}
                   whileTap={{ scale: 0.95 }}
@@ -753,13 +861,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
       <footer className="py-8 text-center border-t border-white/6">
         <p className="text-gray-600 text-sm">
           © 2026 Nikini Edirisinghe · Built with React & Framer Motion
         </p>
       </footer>
-
     </div>
   );
 }
