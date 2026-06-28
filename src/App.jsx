@@ -27,6 +27,15 @@ const ROLES = [
 
 const PROJECTS = [
   {
+    title: "Dahaiyagala Corridor Guardian",
+    desc: "AI-powered environmental intelligence platform for monitoring deforestation and elephant corridor health using Sentinel-2 imagery, NDVI analysis and deep learning.",
+    tech: ["Python", "Streamlit", "PyTorch", "U-Net", "Google Earth Engine", "GIS"],
+    image: "/projects/dahaiyagala.jpg",
+    github: "https://github.com/Niki824",
+    demo: null,
+    accent: "#22c55e",
+  },
+  {
     title: "AI-CyberScope",
     desc: "Machine learning based phishing website detection system with real-time cybersecurity risk scoring and threat intelligence.",
     tech: ["Python", "Streamlit", "Scikit-learn", "Cybersecurity"],
@@ -55,8 +64,8 @@ const PROJECTS = [
   },
   {
     title: "Social Media Risk Analyzer",
-    desc: "AI-based addiction risk prediction from user behaviour data using ensemble ML models with SHAP explainability.",
-    tech: ["Python", "Flask", "Scikit-learn", "SHAP"],
+    desc: "AI-based addiction risk prediction from user behaviour data using ensemble ML models with explainable dashboard insights.",
+    tech: ["Python", "Flask", "Scikit-learn", "Machine Learning"],
     image: "/projects/social-risk.jpeg",
     github: "https://github.com/Niki824",
     demo: null,
@@ -70,6 +79,31 @@ const PROJECTS = [
     github: "https://github.com/Niki824",
     demo: null,
     accent: "#f97316",
+  },
+];
+
+
+const CURRENTLY_BUILDING = [
+  {
+    title: "University Face Recognition System",
+    desc: "Computer vision internship project for student identification using face recognition and deep learning.",
+    tech: ["Python", "OpenCV", "Deep Learning", "Computer Vision"],
+    status: "In Development",
+    icon: "👤",
+  },
+  {
+    title: "Safety Predictor Sri Lanka",
+    desc: "Location-aware safety prediction platform for women and children using geospatial risk data.",
+    tech: ["FastAPI", "React", "Machine Learning", "GIS"],
+    status: "In Development",
+    icon: "🛡️",
+  },
+  {
+    title: "RAG Question Answering System",
+    desc: "Retrieval-Augmented Generation system for intelligent document question answering.",
+    tech: ["FAISS", "Transformers", "RAG", "NLP"],
+    status: "In Development",
+    icon: "📚",
   },
 ];
 
@@ -103,9 +137,9 @@ const SKILLS_TAGS = [
 ];
 
 const STATS = [
-  { number: "5+", label: "Projects Completed" },
-  { number: "15+", label: "Technologies Used" },
-  { number: "4", label: "Focus Areas" },
+  { number: "10+", label: "Projects Built" },
+  { number: "20+", label: "Technologies Used" },
+  { number: "6", label: "Focus Areas" },
 ];
 
 const TIMELINE = [
@@ -115,6 +149,13 @@ const TIMELINE = [
     org: "Coventry University · NIBM (KIC)",
     desc: "Specialising in AI, Machine Learning, NLP and Cybersecurity. Building real-world intelligent systems.",
     icon: "🎓",
+  },
+  {
+    year: "2026",
+    title: "Dahaiyagala Corridor Guardian",
+    org: "Environmental AI Project",
+    desc: "Built an AI-powered deforestation intelligence dashboard using Sentinel-2 imagery, NDVI analysis and deep learning.",
+    icon: "🐘",
   },
   {
     year: "2026",
@@ -660,7 +701,7 @@ export default function App() {
               Featured projects
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              AI, Graph RAG, cybersecurity and intelligent software — built from
+              Environmental AI, Graph RAG, cybersecurity and intelligent software — built from
               scratch.
             </p>
           </motion.div>
@@ -731,6 +772,62 @@ export default function App() {
                       <FaExternalLinkAlt size={11} /> Live Demo
                     </a>
                   )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-24 text-center mb-10"
+          >
+            <p className="text-yellow-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Currently Building
+            </p>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">
+              Projects in development
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              These projects are active works in progress and will be moved to Featured Projects after completion.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {CURRENTLY_BUILDING.map((project, index) => (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white/3 border border-yellow-500/15 rounded-3xl p-7 hover:border-yellow-500/35 hover:bg-yellow-500/5 transition-all duration-300"
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-4xl">{project.icon}</span>
+                  <span className="px-3 py-1 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/20 text-xs font-semibold">
+                    {project.status}
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-bold mb-3 text-white">
+                  {project.title}
+                </h3>
+
+                <p className="text-gray-400 text-sm mb-5 leading-7">
+                  {project.desc}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-400 border border-white/10"
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
               </motion.div>
             ))}
