@@ -138,8 +138,19 @@ const SKILLS_TAGS = [
 
 const STATS = [
   { number: "10+", label: "Projects Built" },
-  { number: "20+", label: "Technologies Used" },
-  { number: "6", label: "Focus Areas" },
+  { number: "30+", label: "Technologies Used" },
+  { number: "7", label: "Internship Modules" },
+];
+
+const CERTIFICATIONS = [
+  {
+    title:
+      "Build AI-powered Dashboard Automation Agents with NLP on Amazon Bedrock AgentCore",
+    issuer: "AWS Training & Certification",
+    date: "July 2026",
+    icon: "☁️",
+    color: "#f59e0b",
+  },
 ];
 
 const TIMELINE = [
@@ -198,7 +209,14 @@ const LEVEL_COLOR = {
   },
 };
 
-const NAV_LINKS = ["about", "skills", "projects", "timeline", "contact"];
+const NAV_LINKS = [
+  "about",
+  "skills",
+  "projects",
+  "timeline",
+  "certifications",
+  "contact",
+];
 
 function ParticleCanvas() {
   const canvasRef = useRef(null);
@@ -888,6 +906,42 @@ export default function App() {
                   </div>
                 </div>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="certifications" className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-3">
+              Certifications
+            </p>
+            <h2 className="text-4xl md:text-5xl font-black">
+              Learning Journey
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {CERTIFICATIONS.map((cert) => (
+              <div
+                key={cert.title}
+                className="bg-white/3 border border-white/8 rounded-3xl p-8 hover:border-violet-500/30 transition"
+                style={{ borderColor: `${cert.color}20` }}
+              >
+                <div className="text-4xl mb-5">{cert.icon}</div>
+                <h3 className="text-xl font-bold mb-3">{cert.title}</h3>
+                <p className="text-violet-300 mb-2">{cert.issuer}</p>
+                <p className="text-gray-400">Completed: {cert.date}</p>
+                <a
+                  href="/certificates/aws-bedrock-certificate.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 transition"
+                >
+                  View Certificate
+                </a>
+              </div>
             ))}
           </div>
         </div>
