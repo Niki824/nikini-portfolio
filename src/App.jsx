@@ -482,54 +482,71 @@ export default function App() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl"
+          className="max-w-7xl w-full grid lg:grid-cols-2 gap-16 items-center"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-violet-500/30 bg-violet-500/8 text-violet-300 text-sm"
-          >
-            <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-            Open to internships & AI collaboration
-          </motion.div>
+          <div className="text-center lg:text-left order-2 lg:order-1">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-violet-500/30 bg-violet-500/8 text-violet-300 text-sm"
+            >
+              <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
+              Open to internships & AI collaboration
+            </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tight leading-none">
-            Hi, I'm{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">
-              Nikini
-            </span>
-          </h1>
+            <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tight leading-none">
+              Hi, I'm{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">
+                Nikini
+              </span>
+            </h1>
 
-          <div className="text-2xl md:text-4xl font-semibold mb-6 h-14 flex items-center justify-center">
-            <Typewriter words={ROLES} />
+            <div className="text-2xl md:text-4xl font-semibold mb-6 h-14 flex items-center justify-center lg:justify-start">
+              <Typewriter words={ROLES} />
+            </div>
+
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto lg:mx-0 mb-12 leading-8">
+              CS undergraduate specialising in Artificial Intelligence, Machine
+              Learning, NLP, Graph RAG and Cybersecurity — building systems that
+              solve real-world problems.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => scrollTo("projects")}
+                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 transition font-semibold shadow-xl shadow-violet-600/30 text-white"
+              >
+                View Projects
+              </motion.button>
+
+              <motion.a
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                href="/cv.pdf"
+                download
+                className="px-8 py-4 rounded-2xl border border-violet-500/40 hover:bg-violet-500/10 transition font-semibold flex items-center gap-2 justify-center text-white"
+              >
+                <FaDownload size={14} /> Download CV
+              </motion.a>
+            </div>
           </div>
 
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-12 leading-8">
-            CS undergraduate specialising in Artificial Intelligence, Machine
-            Learning, NLP, Graph RAG and Cybersecurity — building systems that
-            solve real-world problems.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => scrollTo("projects")}
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 transition font-semibold shadow-xl shadow-violet-600/30 text-white"
-            >
-              View Projects
-            </motion.button>
-
-            <motion.a
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              href="/cv.pdf"
-              download
-              className="px-8 py-4 rounded-2xl border border-violet-500/40 hover:bg-violet-500/10 transition font-semibold flex items-center gap-2 justify-center text-white"
-            >
-              <FaDownload size={14} /> Download CV
-            </motion.a>
+          <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+            <div className="relative">
+              {/* Glow */}
+              <div className="absolute inset-0 rounded-full bg-violet-600 blur-3xl opacity-30"></div>
+              {/* Gradient Border */}
+              <div className="relative p-1 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-purple-500">
+                <img
+                  src="/profile/nikini.png"
+                  alt="Nikini Edirisinghe"
+                  className="w-72 h-72 lg:w-[400px] lg:h-[400px] rounded-full object-cover bg-[#04030f]"
+                />
+              </div>
+            </div>
           </div>
         </motion.div>
       </section>
