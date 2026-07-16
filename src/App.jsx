@@ -27,6 +27,15 @@ const ROLES = [
 
 const PROJECTS = [
   {
+    title: "MediGenie AI",
+    desc: "A 3D voice-enabled educational healthcare assistance platform with health chat, rule-based risk estimation, OCR medical report extraction, demonstration appointments, medicine reminders and optional SMS notifications.",
+    tech: ["React", "FastAPI", "Three.js", "OCR", "Twilio"],
+    image: "/projects/medigenie-ai.png",
+    github: "https://github.com/Niki824/MediGenie-AI",
+    demo: "https://drive.google.com/file/d/1ewUocCk9GgmazrKkHQ8Y1zCjzo2DuH-3/view?usp=drive_link",
+    accent: "#06b6d4",
+  },
+  {
     title: "Dahaiyagala Corridor Guardian",
     desc: "AI-powered environmental intelligence platform for monitoring deforestation and elephant corridor health using Sentinel-2 imagery, NDVI analysis and deep learning.",
     tech: ["Python", "Streamlit", "PyTorch", "U-Net", "Google Earth Engine", "GIS"],
@@ -736,7 +745,7 @@ export default function App() {
               Featured projects
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Environmental AI, Graph RAG, cybersecurity and intelligent software — built from
+              Healthcare AI, environmental intelligence, Graph RAG, cybersecurity and intelligent software — built from
               scratch.
             </p>
           </motion.div>
@@ -759,13 +768,13 @@ export default function App() {
                   }}
                 />
 
-                <div className="h-44 rounded-2xl mb-6 overflow-hidden relative">
+                <div className="aspect-video rounded-2xl mb-6 overflow-hidden relative bg-[#071427] border border-white/10">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                 </div>
 
                 <h3 className="text-xl font-bold mb-3 text-white group-hover:text-violet-200 transition-colors">
